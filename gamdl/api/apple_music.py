@@ -12,7 +12,6 @@ from .constants import (
     APPLE_MUSIC_AMP_API_URL,
     APPLE_MUSIC_ARTIST_API_URI,
     APPLE_MUSIC_SYLLABLE_LYRICS_API_URI,
-    APPLE_MUSIC_ASSETS_API_URI,
     APPLE_MUSIC_COOKIE_DOMAIN,
     APPLE_MUSIC_HOMEPAGE_URL,
     APPLE_MUSIC_LIBRARY_ALBUM_API_URI,
@@ -330,6 +329,11 @@ class AppleMusicApi:
                 storefront=self.storefront,
                 song_id=song_id,
             ),
+            {
+                "l[lyrics]": "en-gb",
+                "l[script]": "en-Latn",
+                "extend": "ttmlLocalizations",
+            },
         )
 
         log.debug("success", syllable_lyrics=syllable_lyrics)
@@ -649,41 +653,6 @@ class AppleMusicApi:
 
         return search_results
 
-    async def get_assets(
-        self,
-        media_id: str,
-        kind: str = "song",
-        include_license_urls: bool = True,
-        hls_encryption: str = "CBC",
-        hls_profile: str = "enhancedHls",
-    ) -> dict:
-        log = logger.bind(
-            action="get_assets",
-            media_id=media_id,
-            kind=kind,
-            include_license_urls=include_license_urls,
-            hls_encryption=hls_encryption,
-            hls_profile=hls_profile,
-        )
-
-        params = {
-            "id": media_id,
-            "kind": kind,
-            "includeLicenseUrls": include_license_urls,
-            "hlsEncryption": hls_encryption,
-        }
-        if hls_profile:
-            params["hlsProfile"] = hls_profile
-
-        assets = await self._amp_request(
-            APPLE_MUSIC_ASSETS_API_URI,
-            params,
-        )
-
-        log.debug("success", assets=assets)
-
-        return assets
-
     async def get_extended_api_data(
         self,
         next_uri: str | None,
@@ -799,6 +768,6 @@ class AppleMusicApi:
                 status_code=response.status_code,
             )
 
-        log.debug("success")
+        log.debug("success", license_exchange=license_exchange)
 
         return license_exchange
