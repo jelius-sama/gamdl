@@ -330,11 +330,6 @@ class AppleMusicApi:
                 storefront=self.storefront,
                 song_id=song_id,
             ),
-            {
-                "l[lyrics]": "en-gb",
-                "l[script]": "en-Latn",
-                "extend": "ttmlLocalizations",
-            },
         )
 
         log.debug("success", syllable_lyrics=syllable_lyrics)
