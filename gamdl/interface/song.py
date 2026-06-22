@@ -92,9 +92,9 @@ class AppleMusicSongInterface:
                 )
 
                 lyrics = self._get_lyrics(
-                    syllable_lyrics_metadata["data"][0]["attributes"][
-                        "ttmlLocalizations"
-                    ],
+                    syllable_lyrics_metadata["data"][0]["attributes"].get("ttmlLocalizations")
+                    or
+                    syllable_lyrics_metadata["data"][0]["attributes"].get("ttml")
                 )
 
 
